@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RSI 自迭代工作台</title>
+  <meta name="description" content="从发现到反馈的六步自迭代工作流参考实现。">
+  <link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="/" aria-label="RSI 工作台首页"><span class="brand-symbol">⌖</span> RSI <span class="brand-sub">WORKBENCH</span></a><nav aria-label="主导航"><button class="nav-button active" data-view="console">运行工作台</button><button class="nav-button" data-view="repositories">仓库管理</button><button class="nav-button" data-view="architecture">系统架构</button></nav><span class="mode-tag" id="mode-tag">连接执行器…</span></header>
+<main>
+<section class="page-heading"><div><p class="eyebrow">SELF-IMPROVING LOOP / 01</p><h1>让每一次迭代，<span>有迹可循。</span></h1><p class="lead">发现问题，协作解决，让验证与反馈回到下一轮。</p></div><button class="primary" id="create-open">＋ 新建工单</button></section>
+<div id="connection" role="status" class="connection">正在连接本地调度器…</div>
+<div id="console-view">
+<div class="execution-strip" id="execution-strip" hidden></div>
+<section class="loop-panel" aria-labelledby="loop-title">
+  <div class="section-heading"><div><p class="eyebrow">THE ITERATION ENGINE</p><h2 id="loop-title">自我迭代 RSI <span class="small-label">六步闭环</span></h2></div><button class="quiet" id="collapse" aria-expanded="true" aria-controls="loop-body">收起 ↑</button></div>
+  <div class="summary" id="summary" aria-label="工单统计"></div>
+  <div class="loop-body" id="loop-body">
+    <div class="loop-visual"><div class="flow-grid" aria-label="发现、分析、开发、验证、发布、反馈依次循环">
+      <div class="step s1"><span>01</span> 发现<i></i></div><div class="step s2"><span>02</span> 分析<i></i></div><div class="step s3"><span>03</span> 开发<i></i></div>
+      <div class="orbit" aria-hidden="true"><div class="orbit-inner"></div><div class="orbit-path"></div></div>
+      <div class="engine-core"><div class="core-ring"><strong>RSI</strong><span>CONTROL LOOP</span></div><p id="loop-caption">等待工单启动</p></div>
+      <div class="loop-mark mark-left" aria-hidden="true">↑</div><div class="loop-mark mark-right" aria-hidden="true">↓</div>
+      <div class="step s6"><i></i><span>06</span> 反馈</div><div class="step s5"><i></i><span>05</span> 发布</div><div class="step s4"><i></i><span>04</span> 验证</div>
+    </div><p class="caption">状态来自本地数据库 · 环路动效仅表示流程</p></div>
+    <div class="resident"><div class="subheading"><strong><span class="live-label">READY</span> 常驻职责</strong><span>按需调用</span></div><div id="roles"></div><p class="caption">常驻职责按需启动独立会话；实际运行与常驻职责分开计数。</p></div>
+  </div>
+</section>
+<section class="workspace"><div class="ticket-area"><div class="section-heading"><div><p class="eyebrow">THE WORKBENCH</p><h2>工单工作台 <span id="ticket-total" class="count-tag">0</span></h2></div><label class="search"><span>⌕</span><input id="search" placeholder="搜索标题或工单编号" aria-label="搜索工单"></label></div>
+  <div class="filters" role="group" aria-label="工单状态筛选"><button data-filter="all" aria-pressed="true">全部</button><button data-filter="active" aria-pressed="false">进行中</button><button data-filter="pending" aria-pressed="false">待处理</button><button data-filter="done" aria-pressed="false">已完成</button><button data-filter="stopped" aria-pressed="false">已停止</button></div><div id="tickets" class="tickets"></div>
+</div><aside class="event-area"><div class="section-heading"><div><p class="eyebrow">EVENT STREAM</p><h2>最近变化</h2></div><span class="event-signal"></span></div><p class="caption">状态与阶段证据来自持久化事件记录。</p><ol class="events" id="events"></ol></aside></section>
+</div>
+<section id="repositories-view" hidden>
+<div class="section-heading"><div><p class="eyebrow">REPOSITORIES / DELIVERY TARGETS</p><h2>仓库管理 <span class="count-tag" id="repository-count">0</span></h2></div><button class="primary" id="repository-open">＋ 添加仓库</button></div>
+<p class="lead">登记本地 Git 仓库，自动发现 GitHub remote 和目标分支。每张工单绑定一个仓库，发布结果归属清楚。</p>
+<div class="repository-grid" id="repository-list"></div>
+<p class="caption">可登记多个仓库。当前执行器支持 Kotlin 策略样例；其他项目登记后，需要接入对应的开发和验收适配器。</p>
+</section>
+<section id="architecture-view" hidden>
+  <div class="architecture-heading"><p class="eyebrow">CONTROL / EXECUTION / OBSERVABILITY</p><h2>一个状态源，三层职责。</h2><p>参照公开直播页设计。控制层管理仓库与状态，Codex 执行角色任务，可信命令负责测试、本地发布和草稿 PR。</p></div>
+  <div class="arch-layers"><article><span class="layer-index">01</span><h3>控制层</h3><p>工单入口 → 项目经理 → 状态机</p><div class="arch-tags"><span>优先级</span><span>幂等键</span><span>修复上限</span><span>版本发布确认</span></div></article><div class="connector-arrow">↓ 事务派工 · 租约领取</div><article><span class="layer-index">02</span><h3>执行层</h3><p>分析员 → 开发员 → 验证员 → 发布员 → 维护专员</p><div class="arch-tags"><span>真实 Codex CLI 已接入</span><span>项目互斥锁</span><span>过期结果拒收</span></div><p class="future">独立 Git 测试仓库 · 固定 Kotlin 验收 · 失败修复 · 同一 JAR 本地发布</p></article><div class="connector-arrow">↓ 结果存证 · 状态转换</div><article><span class="layer-index">03</span><h3>数据与观察层</h3><p>SQLite → 工单 / 执行 / 事件 / 确认 / 经验候选 → JSON 快照 → 工作台</p><div class="arch-tags"><span>事务一致性</span><span>ETag</span><span>失败保留旧视图</span><span>常驻与运行分开计数</span></div></article></div>
+  <div class="principles"><article><h3>验证与发布绑定同一版本</h3><p>候选摘要、验证摘要和发布确认摘要必须一致。修复会使旧验证与确认失效。</p></article><article><h3>自迭代需要明确停止条件</h3><p>自动修复最多两轮。持续失败进入阻塞；停止的任务不计入完成。</p></article><article><h3>经验先成为候选</h3><p>完成后归档经验候选，经过复核再用于下一轮规则更新。当前不会修改 Codex 的个人记忆。</p></article></div>
+</section>
+<footer><span>RSI WORKBENCH · 模仿与灵感来源：<a href="https://codexradar.com/" target="_blank" rel="noopener noreferrer">Codex Radar</a> / <a href="https://codexradar.com/dev-live/" target="_blank" rel="noopener noreferrer">开发直播</a></span><span id="footer-mode">Python · SQLite · Codex CLI · Kotlin/JVM</span></footer>
+</main>
+<dialog id="create-dialog"><form id="create-form"><div class="dialog-heading"><div><p class="eyebrow">NEW WORK ITEM</p><h2>发现一个值得改进的地方</h2></div><button type="button" class="icon-button" data-close="create-dialog" aria-label="关闭新建工单">×</button></div><label>工单标题<input name="title" required maxlength="120" placeholder="例如：优化状态刷新与错误提示"></label><label>目标与验收条件<textarea name="description" maxlength="1500" rows="3" placeholder="说明预期结果，以及如何判断完成。"></textarea></label><div class="form-row"><label>关联仓库<select name="project" required><option value="demo-site">演示项目</option></select></label><label>优先级<select name="priority"><option value="2">P2 · 常规</option><option value="1">P1 · 重要</option><option value="0">P0 · 紧急</option><option value="3">P3 · 改善</option></select></label></div><label id="scenario-field">演示场景<select name="scenario"><option value="pass">正常完成</option><option value="repair_once">首次验证失败，修复后通过</option><option value="always_fail">持续失败，到达上限后阻塞</option></select></label><p class="caption" id="create-note">保存后点击“启动”推进。</p><p id="form-error" role="alert"></p><button class="primary" type="submit">创建工单 →</button></form></dialog>
+<dialog id="detail-dialog"><div class="dialog-heading"><div><p class="eyebrow">WORK ITEM / EVIDENCE</p><h2 id="detail-title">工单详情</h2></div><button type="button" class="icon-button" data-close="detail-dialog" aria-label="关闭工单详情">×</button></div><div id="detail-content"></div></dialog>
+<dialog id="repository-dialog"><form id="repository-form"><div class="dialog-heading"><div><p class="eyebrow">ADD REPOSITORY</p><h2>添加仓库</h2></div><button type="button" class="icon-button" data-close="repository-dialog" aria-label="关闭添加仓库">×</button></div>
+<label>本地 Git 仓库路径<input name="path" required placeholder="C:/Projects/my-repository" maxlength="1000"></label>
+<label>显示名称（选填）<input name="name" maxlength="80" placeholder="默认使用文件夹名称"></label>
+<p class="caption">读取现有 Git 信息，自动识别 remote 和分支。添加仓库不会修改源代码或推送分支。</p><p class="form-error" id="repository-error" role="alert"></p><button type="submit" class="primary">添加并识别仓库 →</button></form></dialog>
+<dialog id="release-dialog"><div class="dialog-heading"><div><p class="eyebrow">PUBLISH / ARTIFACTS & PULL REQUEST</p><h2 id="release-title">发布详情</h2></div><button type="button" class="icon-button" data-close="release-dialog" aria-label="关闭发布详情">×</button></div>
+<div id="release-content"></div><label class="check-label"><input type="checkbox" id="release-include-pr"> 同时创建 GitHub 草稿 PR</label><p class="caption">PR 包含通过验收的提交和验证摘要，创建后进入代码审查。CI 状态独立于本地验收。</p><p id="release-error" class="form-error" role="alert"></p><button class="primary" id="release-confirm">确认发布</button></dialog>
+<div id="toast" role="status" hidden></div>
+</body></html>

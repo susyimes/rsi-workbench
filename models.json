@@ -1,0 +1,15 @@
+{
+  "source": "https://codexradar.com/api/development-live/current",
+  "observed_content_at": "2026-10-29T06:39:20.334969Z",
+  "notes": "常驻角色逐项采用公开快照。分析/开发/验证/发布执行角色以当前工单264的模型配置作为本仓库默认值；原站没有公开固定的执行角色映射。",
+  "roles": {
+    "manager": {"model":"gpt-6.1-sol","effort":"high"},
+    "administrator": {"model":"gpt-6-luna","effort":"max"},
+    "adviser": {"model":"gpt-6.1-sol","effort":"high"},
+    "maintainer": {"model":"gpt-6.1-sol","effort":"high"},
+    "analyst": {"model":"gpt-6.1-sol","effort":"high"},
+    "developer": {"model":"gpt-6.1-sol","effort":"high"},
+    "verifier": {"model":"gpt-6.1-sol","effort":"high"},
+    "publisher": {"model":"gpt-6.1-sol","effort":"high"}
+  }
+}

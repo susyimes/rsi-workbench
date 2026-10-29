@@ -1,0 +1,15 @@
+{
+  "name": "RSI 自迭代工作台",
+  "mode": "demo",
+  "workers": 2,
+  "step_seconds": 1.2,
+  "lease_seconds": 30,
+  "max_repairs": 2,
+  "max_recoveries": 2,
+  "resident_roles": [
+    {"id":"manager","name":"项目经理","short":"经理","duty":"分解目标、排定优先级、协调工单和集中验收"},
+    {"id":"administrator","name":"状态管理员","short":"管理","duty":"维护状态与证据、生成公开快照、同步工作台"},
+    {"id":"adviser","name":"协作顾问","short":"顾问","duty":"提供第二视角、方案评审和界面审阅"},
+    {"id":"maintainer","name":"维护专员","short":"维护","duty":"检查内容与服务、收集问题、提出维护工单"}
+  ]
+}

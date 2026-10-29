@@ -1,0 +1,20 @@
+runtime/
+__pycache__/
+*.pyc
+work/
+build/
+*.jar
+*.sqlite3*
+*.db
+.env
+auth.json
+**/events.jsonl
+**/stderr.log
+**/prompt.txt
+
+# Runtime evidence is opt-in for sharing, never part of a normal source commit.
+reports/
+*.log
+.env.*
+*.pem
+*.key
